@@ -100,10 +100,10 @@ M.move_to_tab = function(target_number)
   vim.api.nvim_command('normal ' .. current_tab_number .. 'gt')
 end
 
-M.setup = function(opts)
+M.setup = function()
   vim.api.nvim_add_user_command(
     'DBMNextBuffer',
-    function () press_keys('<C-w><C-w>') end,
+    function() press_keys('<C-w><C-w>') end,
     {nargs = 0}
   )
 
@@ -146,50 +146,6 @@ M.setup = function(opts)
     end,
     {nargs = 1}
   )
-
-  if (opts ~= nil and opts.use_example_keybindings == true) then
-    local map = vim.api.nvim_set_keymap
-
-    -- Buffer navigation
-    map('n', '<M-h>', '<C-w>h', {noremap = true})
-    map('n', '<M-j>', '<C-w>j', {noremap = true})
-    map('n', '<M-k>', '<C-w>k', {noremap = true})
-    map('n', '<M-l>', '<C-w>l', {noremap = true})
-
-    -- Buffer management
-    map('n', '<M-CR>', ':DBMSwapBuffer<CR>',         {noremap = true, silent = true})
-    map('n', '<M-e>',  ':DBMSplit ',                 {noremap = true})
-    map('n', '<M-f>',  ':DBMToggleFocusBuffer<CR>',  {noremap = true, silent = true})
-    map('n', '<M-n>',  ':DBMNextBuffer<CR>',         {noremap = true, silent = true})
-    map('n', '<M-q>',  ':quit<CR>',                  {noremap = true, silent = true})
-    map('n', '<M-t>',  ':DBMSplit<CR>:terminal<CR>', {noremap = true, silent = true})
-
-    -- Tab navigation
-    map('n', '<M-1>', ':DBMViewTab 1<CR>', {noremap = true, silent = true})
-    map('n', '<M-2>', ':DBMViewTab 2<CR>', {noremap = true, silent = true})
-    map('n', '<M-3>', ':DBMViewTab 3<CR>', {noremap = true, silent = true})
-    map('n', '<M-4>', ':DBMViewTab 4<CR>', {noremap = true, silent = true})
-    map('n', '<M-5>', ':DBMViewTab 5<CR>', {noremap = true, silent = true})
-    map('n', '<M-6>', ':DBMViewTab 6<CR>', {noremap = true, silent = true})
-    map('n', '<M-7>', ':DBMViewTab 7<CR>', {noremap = true, silent = true})
-    map('n', '<M-8>', ':DBMViewTab 8<CR>', {noremap = true, silent = true})
-    map('n', '<M-9>', ':DBMViewTab 9<CR>', {noremap = true, silent = true})
-
-    -- Tab management
-    map('n', '<M-m>1', ':DBMMoveToTab 1<CR>', {noremap = true, silent = true})
-    map('n', '<M-m>2', ':DBMMoveToTab 2<CR>', {noremap = true, silent = true})
-    map('n', '<M-m>3', ':DBMMoveToTab 3<CR>', {noremap = true, silent = true})
-    map('n', '<M-m>4', ':DBMMoveToTab 4<CR>', {noremap = true, silent = true})
-    map('n', '<M-m>5', ':DBMMoveToTab 5<CR>', {noremap = true, silent = true})
-    map('n', '<M-m>6', ':DBMMoveToTab 6<CR>', {noremap = true, silent = true})
-    map('n', '<M-m>7', ':DBMMoveToTab 7<CR>', {noremap = true, silent = true})
-    map('n', '<M-m>8', ':DBMMoveToTab 8<CR>', {noremap = true, silent = true})
-    map('n', '<M-m>9', ':DBMMoveToTab 9<CR>', {noremap = true, silent = true})
-  end
-
-  if (opts ~= nil and opts.use_example_settings == true) then
-    vim.opt.hidden = false
-  end
 end
 
 return M
