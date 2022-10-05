@@ -101,37 +101,37 @@ M.move_to_tab = function(target_number)
 end
 
 M.setup = function()
-  vim.api.nvim_add_user_command(
+  vim.api.nvim_create_user_command(
     'DBMNextBuffer',
     function() press_keys('<C-w><C-w>') end,
     {nargs = 0}
   )
 
-  vim.api.nvim_add_user_command(
+  vim.api.nvim_create_user_command(
     'DBMSplit',
     function(args) M.split(args.args) end,
     {nargs = '*', complete='file'}
   )
 
-  vim.api.nvim_add_user_command(
+  vim.api.nvim_create_user_command(
     'DBMSplitBuffer',
     M.split_buffer,
     {nargs = 1}
   )
 
-  vim.api.nvim_add_user_command(
+  vim.api.nvim_create_user_command(
     'DBMSwapBuffer',
     M.swap_buffer,
     {nargs = 0}
   )
 
-  vim.api.nvim_add_user_command(
+  vim.api.nvim_create_user_command(
     'DBMToggleFocusBuffer',
     M.toggle_focus_buffer,
     {nargs = 0}
   )
 
-  vim.api.nvim_add_user_command(
+  vim.api.nvim_create_user_command(
     'DBMViewTab',
     function(args)
       M.view_or_create_tab(tonumber(args.args))
@@ -139,7 +139,7 @@ M.setup = function()
     {nargs = 1}
   )
 
-  vim.api.nvim_add_user_command(
+  vim.api.nvim_create_user_command(
     'DBMMoveToTab',
     function(args)
       M.move_to_tab(tonumber(args.args))
