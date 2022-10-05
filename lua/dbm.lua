@@ -101,6 +101,17 @@ M.move_to_tab = function(target_number)
 end
 
 M.setup = function()
+  local tabCompletion = function(_, _, _)
+    local tab_table = vim.api.nvim_list_tabpages()
+    local cmp_table = {}
+
+    for k, v in pairs(tab_table) do
+      cmp_table[k] = tostring(v)
+    end
+
+    return cmp_table
+  end
+
   vim.api.nvim_create_user_command(
     'DBMNextBuffer',
     function() press_keys('<C-w><C-w>') end,
@@ -136,7 +147,7 @@ M.setup = function()
     function(args)
       M.view_or_create_tab(tonumber(args.args))
     end,
-    {nargs = 1}
+    {nargs = 1, complete = tabCompletion}
   )
 
   vim.api.nvim_create_user_command(
@@ -144,7 +155,7 @@ M.setup = function()
     function(args)
       M.move_to_tab(tonumber(args.args))
     end,
-    {nargs = 1}
+    {nargs = 1, complete = tabCompletion}
   )
 end
 
