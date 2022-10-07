@@ -1,7 +1,3 @@
-local function press_keys(keys)
-  vim.cmd(vim.api.nvim_replace_termcodes('normal ' .. keys, true, true, true))
-end
-
 local M = {}
 
 M.split_buffer = function(buffer_number)
@@ -11,7 +7,7 @@ M.split_buffer = function(buffer_number)
   if (number_of_windows_in_tab == 1) then
     vim.api.nvim_command('vert belowright sbuffer ' .. buffer_number)
   else
-    press_keys('<C-w>l')
+    vim.cmd('wincmd l')
     vim.api.nvim_command('belowright sbuffer ' .. buffer_number)
   end
 end
@@ -23,11 +19,11 @@ M.swap_buffer = function()
 
   if (selected_buffer_number ~= main_buffer_number) then
     local cursor_position = vim.fn.getpos('.')
-    press_keys('<C-w>h')
+    vim.cmd('wincmd h')
     vim.cmd('buffer ' .. selected_buffer_number)
-    press_keys('<C-w>p')
+    vim.cmd('wincmd p')
     vim.cmd('buffer ' .. main_buffer_number)
-    press_keys('<C-w>h')
+    vim.cmd('wincmd h')
     vim.fn.setpos('.', cursor_position)
   end
 end
@@ -43,7 +39,7 @@ M.split = function(target)
     if (number_of_windows == 1) then
       vim.api.nvim_command('vert belowright split ' .. target)
     else
-      press_keys('<C-w>l')
+      vim.cmd('wincmd l')
       vim.api.nvim_command('belowright split ' .. target)
     end
   end
@@ -53,10 +49,11 @@ M.is_focus_buffer_toggled = false
 
 M.toggle_focus_buffer = function()
   if M.is_focus_buffer_toggled then
-    press_keys('<C-w>=')
+    vim.cmd('wincmd =')
     M.is_focus_buffer_toggled = false
   else
-    press_keys('<C-w>_<C-w>|')
+    vim.cmd('wincmd _')
+    vim.cmd('wincmd |')
     M.is_focus_buffer_toggled = true
   end
 end
@@ -114,7 +111,7 @@ M.setup = function()
 
   vim.api.nvim_create_user_command(
     'DBMNextBuffer',
-    function() press_keys('<C-w><C-w>') end,
+    function() vim.cmd('wincmd w') end,
     {nargs = 0}
   )
 
@@ -126,7 +123,9 @@ M.setup = function()
 
   vim.api.nvim_create_user_command(
     'DBMSplitBuffer',
-    M.split_buffer,
+    function(args)
+      M.split_buffer(tonumber(args.args))
+    end,
     {nargs = 1}
   )
 
