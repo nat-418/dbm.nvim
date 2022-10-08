@@ -1,6 +1,6 @@
 local M = {}
 
-M.split_buffer = function(buffer_number)
+M.split_window = function(buffer_number)
   local current_tab_number = vim.fn.tabpagenr()
   local number_of_windows_in_tab = vim.fn.tabpagewinnr(current_tab_number, '$')
 
@@ -12,7 +12,7 @@ M.split_buffer = function(buffer_number)
   end
 end
 
-M.swap_buffer = function()
+M.swap = function()
   local buffer_number_list = vim.fn.tabpagebuflist()
   local selected_buffer_number = vim.fn.bufnr()
   local main_buffer_number = buffer_number_list[1]
@@ -33,6 +33,8 @@ M.split = function(target)
   local current_tab_number  = vim.fn.tabpagenr()
   local number_of_windows   = vim.fn.tabpagewinnr( current_tab_number, '$')
 
+  if target == nil then target = '' end
+
   if (current_buffer_name == '') then
     vim.api.nvim_command('edit ' .. target)
   else
@@ -45,20 +47,20 @@ M.split = function(target)
   end
 end
 
-M.is_focus_buffer_toggled = false
+M.is_focus_window_toggled = false
 
-M.toggle_focus_buffer = function()
-  if M.is_focus_buffer_toggled then
+M.focus = function()
+  if M.is_focus_window_toggled then
     vim.cmd('wincmd =')
-    M.is_focus_buffer_toggled = false
+    M.is_focus_window_toggled = false
   else
     vim.cmd('wincmd _')
     vim.cmd('wincmd |')
-    M.is_focus_buffer_toggled = true
+    M.is_focus_window_toggled = true
   end
 end
 
-M.view_or_create_tab = function(target_number)
+M.go = function(target_number)
   local number_of_tabs = vim.fn.tabpagenr('$')
 
   while (number_of_tabs < target_number)
@@ -70,11 +72,11 @@ M.view_or_create_tab = function(target_number)
   vim.cmd('normal ' .. target_number .. 'gt')
 end
 
-M.move_to_tab = function(target_number)
+M.send = function(target_number)
   local current_buffer_number = vim.fn.bufnr()
   local current_tab_number = vim.fn.tabpagenr()
 
-  M.view_or_create_tab(target_number)
+  M.go(target_number)
 
   local number_of_windows = vim.fn.tabpagewinnr(target_number, '$')
 
@@ -88,73 +90,54 @@ M.move_to_tab = function(target_number)
     if (lone_buffer_name == '') then
       vim.api.nvim_command('buffer ' .. current_buffer_number)
     else
-      M.split_buffer(current_buffer_number)
+      M.split_window(current_buffer_number)
     end
   else
-      M.split_buffer(current_buffer_number)
+      M.split_window(current_buffer_number)
   end
 
   vim.api.nvim_command('normal ' .. current_tab_number .. 'gt')
 end
 
+M.next = function() vim.cmd('wincmd w') end
+
+M.cmd = function(args)
+  local string2list = function(string)
+    local list = {}
+    for each in string:gmatch("%w+") do table.insert(list, each) end
+    return list
+  end
+
+  local parsed = string2list(args.args)
+
+  local subcmd = parsed[1]
+  local arg1   = parsed[2]
+
+  if subcmd == 'next'  then M.next()               end
+  if subcmd == 'split' then M.split(arg1)          end
+  if subcmd == 'swap'  then M.swap()               end
+  if subcmd == 'focus' then M.focus()              end
+  if subcmd == 'send'  then M.send(tonumber(arg1)) end
+  if subcmd == 'go'    then M.go(tonumber(arg1))   end
+end
+
+
 M.setup = function()
-  local tabCompletion = function(_, _, _)
-    local tab_table = vim.api.nvim_list_tabpages()
-    local cmp_table = {}
-
-    for k, v in pairs(tab_table) do
-      cmp_table[k] = tostring(v)
-    end
-
-    return cmp_table
+  local completion = function(_, _, _)
+    return {
+      'next',
+      'split',
+      'swap',
+      'focus',
+      'send',
+      'go'
+    }
   end
 
   vim.api.nvim_create_user_command(
-    'DBMNextBuffer',
-    function() vim.cmd('wincmd w') end,
-    {nargs = 0}
-  )
-
-  vim.api.nvim_create_user_command(
-    'DBMSplit',
-    function(args) M.split(args.args) end,
-    {nargs = '*', complete='file'}
-  )
-
-  vim.api.nvim_create_user_command(
-    'DBMSplitBuffer',
-    function(args)
-      M.split_buffer(tonumber(args.args))
-    end,
-    {nargs = 1}
-  )
-
-  vim.api.nvim_create_user_command(
-    'DBMSwapBuffer',
-    M.swap_buffer,
-    {nargs = 0}
-  )
-
-  vim.api.nvim_create_user_command(
-    'DBMToggleFocusBuffer',
-    M.toggle_focus_buffer,
-    {nargs = 0}
-  )
-
-  vim.api.nvim_create_user_command(
-    'DBMViewTab',
-    function(args)
-      M.view_or_create_tab(tonumber(args.args))
-    end,
-    {nargs = 1, complete = tabCompletion}
-  )
-
-  vim.api.nvim_create_user_command(
-    'DBMMoveToTab',
-    function(args)
-      M.move_to_tab(tonumber(args.args))
-    end,
-    {nargs = 1, complete = tabCompletion}
+    'DBM',
+    function(args) M.cmd(args) end,
+    {nargs = '*', complete = completion}
   )
 end
 
