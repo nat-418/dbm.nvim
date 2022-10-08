@@ -22,21 +22,26 @@ your `init.lua`:
 require('dbm').setup()
 ```
 
-## Commands
+## Subcommands
 
-| command                | description                               |
-|------------------------|-------------------------------------------|
-|`:DBMNextBuffer`        | Cycle through buffers windows             |
-|`:DBMSplitBuffer`       | Open a new buffer window                  |
-|`:DBMSwapBuffer`        | Minor buffer window → major buffer window |
-|`:DBMToggleFocusBuffer` | Maximize/Minimize major buffer window     |
-|`:DBMMoveToTab`         | Send buffer window to tab _n_             |
-|`:DBMViewTab`           | Navigate to tab _n_                       |
+The plugin ships one command, `:DBM` with a few subcommands:
+
+| command                 | description                                           |
+|-------------------------|-------------------------------------------------------|
+|`:DBM next`              | Cycle through buffer windows                          |
+|`:DBM split {target}`    | Open a new buffer window with an optional `{target}`* |
+|`:DBM swap`              | Minor buffer window → major buffer window             |
+|`:DBM focus`             | Maximize/Minimize major buffer window                 |
+|`:DBM send  {tab_number}`| Send buffer window to `{tab_number}`                  |
+|`:DBM go    {tab_number}`| Navigate to tab `{tab_number}`                        |
+
+**Note**: the `:DBM split {target}` could be anything passed to a normal
+`:split` command.
 
 ## Example configuration
 
 If you'd like to use the plugin with the author's keybindings and settings,
-add this to your config:
+add this to your `init.lua`:
 
 ```lua
 require('dbm').setup()
@@ -54,34 +59,34 @@ nmap('<M-k>', '<C-w>k', {noremap = true})
 nmap('<M-l>', '<C-w>l', {noremap = true})
 
 -- Buffer window management
-nmap('<M-CR>', ':DBMSwapBuffer<CR>',         {noremap = true, silent = true})
-nmap('<M-e>',  ':DBMSplit ',                 {noremap = true})
-nmap('<M-f>',  ':DBMToggleFocusBuffer<CR>',  {noremap = true, silent = true})
-nmap('<M-n>',  ':DBMNextBuffer<CR>',         {noremap = true, silent = true})
-nmap('<M-q>',  ':quit<CR>',                  {noremap = true, silent = true})
-nmap('<M-t>',  ':DBMSplit<CR>:terminal<CR>', {noremap = true, silent = true})
+nmap('<M-CR>', ':DBM swap<CR>',               {noremap = true, silent = true})
+nmap('<M-e>',  ':DBM split ',                 {noremap = true})
+nmap('<M-f>',  ':DBM focus<CR>',              {noremap = true, silent = true})
+nmap('<M-n>',  ':DBM next<CR>',               {noremap = true, silent = true})
+nmap('<M-q>',  ':quit<CR>',                   {noremap = true, silent = true})
+nmap('<M-t>',  ':DBM split<CR>:terminal<CR>', {noremap = true, silent = true})
 
 -- Tab navigation
-nmap('<M-1>', ':DBMViewTab 1<CR>', {noremap = true, silent = true})
-nmap('<M-2>', ':DBMViewTab 2<CR>', {noremap = true, silent = true})
-nmap('<M-3>', ':DBMViewTab 3<CR>', {noremap = true, silent = true})
-nmap('<M-4>', ':DBMViewTab 4<CR>', {noremap = true, silent = true})
-nmap('<M-5>', ':DBMViewTab 5<CR>', {noremap = true, silent = true})
-nmap('<M-6>', ':DBMViewTab 6<CR>', {noremap = true, silent = true})
-nmap('<M-7>', ':DBMViewTab 7<CR>', {noremap = true, silent = true})
-nmap('<M-8>', ':DBMViewTab 8<CR>', {noremap = true, silent = true})
-nmap('<M-9>', ':DBMViewTab 9<CR>', {noremap = true, silent = true})
+nmap('<M-1>', ':DBM go 1<CR>', {noremap = true, silent = true})
+nmap('<M-2>', ':DBM go 2<CR>', {noremap = true, silent = true})
+nmap('<M-3>', ':DBM go 3<CR>', {noremap = true, silent = true})
+nmap('<M-4>', ':DBM go 4<CR>', {noremap = true, silent = true})
+nmap('<M-5>', ':DBM go 5<CR>', {noremap = true, silent = true})
+nmap('<M-6>', ':DBM go 6<CR>', {noremap = true, silent = true})
+nmap('<M-7>', ':DBM go 7<CR>', {noremap = true, silent = true})
+nmap('<M-8>', ':DBM go 8<CR>', {noremap = true, silent = true})
+nmap('<M-9>', ':DBM go 9<CR>', {noremap = true, silent = true})
 
 -- Tab management
-nmap('<M-m>1', ':DBMMoveToTab 1<CR>', {noremap = true, silent = true})
-nmap('<M-m>2', ':DBMMoveToTab 2<CR>', {noremap = true, silent = true})
-nmap('<M-m>3', ':DBMMoveToTab 3<CR>', {noremap = true, silent = true})
-nmap('<M-m>4', ':DBMMoveToTab 4<CR>', {noremap = true, silent = true})
-nmap('<M-m>5', ':DBMMoveToTab 5<CR>', {noremap = true, silent = true})
-nmap('<M-m>6', ':DBMMoveToTab 6<CR>', {noremap = true, silent = true})
-nmap('<M-m>7', ':DBMMoveToTab 7<CR>', {noremap = true, silent = true})
-nmap('<M-m>8', ':DBMMoveToTab 8<CR>', {noremap = true, silent = true})
-nmap('<M-m>9', ':DBMMoveToTab 9<CR>', {noremap = true, silent = true})
+nmap('<M-m>1', ':DBM send 1<CR>', {noremap = true, silent = true})
+nmap('<M-m>2', ':DBM send 2<CR>', {noremap = true, silent = true})
+nmap('<M-m>3', ':DBM send 3<CR>', {noremap = true, silent = true})
+nmap('<M-m>4', ':DBM send 4<CR>', {noremap = true, silent = true})
+nmap('<M-m>5', ':DBM send 5<CR>', {noremap = true, silent = true})
+nmap('<M-m>6', ':DBM send 6<CR>', {noremap = true, silent = true})
+nmap('<M-m>7', ':DBM send 7<CR>', {noremap = true, silent = true})
+nmap('<M-m>8', ':DBM send 8<CR>', {noremap = true, silent = true})
+nmap('<M-m>9', ':DBM send 9<CR>', {noremap = true, silent = true})
 
 -- Status and Tab lines
 require('lualine').setup {
