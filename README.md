@@ -2,16 +2,16 @@
 
 ![Example screenshot](dbm.png)
 
-This plugin provides dynamic buffer management for Neovim, inspired by tiling
-window managers like [dwm](https://dwm.suckless.org). It automatically manages
-buffers in a tiled layout with a vertically maximized, lefthand "major" buffer,
-and a stack of "minor" buffers on the right. The major area contains the buffer
-which currently needs most attention, whereas the stacking area contains all
-other buffers. Buffers can be quickly rotated between major and minor, cycled
-through on screen, or maximized. Buffers are grouped by nine possible tabs.
-Each buffer can be tagged with one or multiple tabs. These tabs act more like
-virtual desktops or workspaces than they do tabs as implemented in most other
-applications.
+This plugin provides dynamic buffer window management for Neovim, inspired by
+tiling window managers like [dwm](https://dwm.suckless.org). It automatically
+manages buffer windows in a tiled layout with a vertically maximized, lefthand
+"major" buffer window, and a stack of "minor" buffer windows on the right. The
+major window contains the buffer which currently needs most attention, whereas
+the stacking windows contain all other buffers. Buffer windows can be quickly
+rotated between major and minor, cycled through on screen, or maximized. Buffer
+windows are grouped by nine possible tabs. Each buffer window can be placed on
+one or multiple tabs. These tabs act more like virtual desktops or workspaces
+than they do tabs as implemented in most other applications.
 
 # Installing
 
@@ -24,14 +24,14 @@ require('dbm').setup()
 
 ## Commands
 
-| command                | description                    |
-|------------------------|--------------------------------|
-|`:DBMNextBuffer`        | Cycle through buffers          |
-|`:DBMSplitBuffer`       | Open a new buffer              |
-|`:DBMSwapBuffer`        | Minor buffer → major buffer    |
-|`:DBMToggleFocusBuffer` | Maximize/Minimize major buffer |
-|`:DBMMoveToTab`         | Send buffer to tab _n_         |
-|`:DBMViewTab`           | Navigate to tab _n_            |
+| command                | description                               |
+|------------------------|-------------------------------------------|
+|`:DBMNextBuffer`        | Cycle through buffers windows             |
+|`:DBMSplitBuffer`       | Open a new buffer window                  |
+|`:DBMSwapBuffer`        | Minor buffer window → major buffer window |
+|`:DBMToggleFocusBuffer` | Maximize/Minimize major buffer window     |
+|`:DBMMoveToTab`         | Send buffer window to tab _n_             |
+|`:DBMViewTab`           | Navigate to tab _n_                       |
 
 ## Example configuration
 
@@ -47,13 +47,13 @@ local nmap = function(input, output, options)
   vim.api.nvim_set_keymap('n', input, output, options)
 end
 
--- Buffer navigation
+-- Buffer window navigation
 nmap('<M-h>', '<C-w>h', {noremap = true})
 nmap('<M-j>', '<C-w>j', {noremap = true})
 nmap('<M-k>', '<C-w>k', {noremap = true})
 nmap('<M-l>', '<C-w>l', {noremap = true})
 
--- Buffer management
+-- Buffer window management
 nmap('<M-CR>', ':DBMSwapBuffer<CR>',         {noremap = true, silent = true})
 nmap('<M-e>',  ':DBMSplit ',                 {noremap = true})
 nmap('<M-f>',  ':DBMToggleFocusBuffer<CR>',  {noremap = true, silent = true})
