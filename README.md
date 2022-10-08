@@ -13,7 +13,7 @@ windows are grouped by nine possible tabs. Each buffer window can be placed on
 one or multiple tabs. These tabs act more like virtual desktops or workspaces
 than they do tabs as implemented in most other applications.
 
-# Installing
+## Installing
 
 Use git or your favorite package manager, and then add this configuration to
 your `init.lua`:
