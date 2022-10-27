@@ -1,4 +1,4 @@
-# dbm.nvim
+# dbm.nvim 🪟
 
 ![Example screenshot](dbm.png)
 
